@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 @interface ViewController ()
 
@@ -26,7 +27,15 @@
     self.myBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:uuid
                                                                   major:1
                                                                   minor:1
-                                                             identifier:@"com.goffity.test.ibeacon.Beacon"];
+                                                             identifier:@"com.goffity.test.ibeacon"];
+    
+    CFArrayRef myArray = CNCopySupportedInterfaces();
+    NSLog(@"SSID array: %@",myArray);
+    CFDictionaryRef myDict = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
+    NSLog(@"SSID dict: %@",myDict);
+//    NSLog(@"SSID: %@",CFDictionaryGetValue(myDict, kCNNetworkInfoKeySSID));
+    NSString *networkName = CFDictionaryGetValue(myDict, kCNNetworkInfoKeySSID);
+    NSLog(@"SSID: %@",networkName);
     
 }
 
